@@ -1,0 +1,24 @@
+{
+  "name": "backup-mysql-s3",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/man20820/node-backup-mysql-s3.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/man20820/node-backup-mysql-s3/issues"
+  },
+  "homepage": "https://github.com/man20820/node-backup-mysql-s3#readme",
+  "dependencies": {
+    "aws-sdk": "^2.1299.0",
+    "child_process": "^1.0.2",
+    "dotenv": "^16.0.3"
+  }
+}
