@@ -4,6 +4,7 @@ const AWS = require('aws-sdk')
 const date = new Date()
 const fs = require('fs')
 const fsp = require('fs').promises
+const cron = require('node-cron')
 
 const endpoint = process.env.S3_ENDPOINT
 const accessKeyId = process.env.S3_ACCESS_KEY_ID
@@ -21,6 +22,14 @@ const filename = `backup-${mysqlDB}-${date.toISOString().slice(0, 10)}.sql`
 const path = process.env.S3_PATH
 const fullFilename = path + filename
 
+cron.schedule('*/20 * * * * *', async () => {
+    try {
+      await backup()
+    } catch (err) {
+      console.error(err)
+    }
+  })
+
 // console.log(fullFilename)
 
 AWS.config.update({
@@ -33,6 +42,8 @@ AWS.config.update({
 const s3 = new AWS.S3()
 
 const command = `mysqldump -P ${mysqlPort} -h ${mysqlHost} -u ${mysqlUser} -p${mysqlPassword} ${mysqlDB} > ${filename}`
+
+const backup = () => {
 
 exec(command, (err, stdout, stderr) => {
   if (err) {
@@ -73,3 +84,4 @@ exec(command, (err, stdout, stderr) => {
   }
   upload()
 })
+}
