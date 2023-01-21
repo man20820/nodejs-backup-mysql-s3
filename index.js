@@ -18,11 +18,13 @@ const mysqlDB = process.env.MYSQL_DB
 const mysqlUser = process.env.MYSQL_USER
 const mysqlPassword = process.env.MYSQL_PASSWORD
 
+const schedule = process.env.SCHEDULE
+
 const filename = `backup-${mysqlDB}-${date.toISOString().slice(0, 10)}.sql`
 const path = process.env.S3_PATH
 const fullFilename = path + filename
 
-cron.schedule('*/20 * * * * *', async () => {
+cron.schedule(`${schedule}`, async () => {
     try {
       await backup()
     } catch (err) {
