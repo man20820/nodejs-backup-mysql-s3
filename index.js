@@ -24,13 +24,13 @@ const filename = `backup-${mysqlDB}-${date.toISOString().slice(0, 10)}.sql`
 const path = process.env.S3_PATH
 const fullFilename = path + filename
 
-cron.schedule(`${schedule}`, async () => {
-    try {
-      await backup()
-    } catch (err) {
-      console.error(err)
-    }
-  })
+// cron.schedule(`${schedule}`, async () => {
+//     try {
+//       await backup()
+//     } catch (err) {
+//       console.error(err)
+//     }
+//   })
 
 // console.log(fullFilename)
 
@@ -45,45 +45,109 @@ const s3 = new AWS.S3()
 
 const command = `mysqldump -P ${mysqlPort} -h ${mysqlHost} -u ${mysqlUser} -p${mysqlPassword} ${mysqlDB} > ${filename}`
 
-const backup = () => {
+;(async () => {
+  const backup = () => {
+    // exec(command, (err, stdout, stderr) => {
+    //   if (err) {
+    //     console.error(`exec error: ${err}`)
+    //     return
+    //   }
 
-exec(command, (err, stdout, stderr) => {
-  if (err) {
-    console.error(`exec error: ${err}`)
-    return
+    //   console.log(`stdout: ${stdout}`)
+    //   console.log(`stderr: ${stderr}`)
+
+    //   // Create a read stream for the file
+    //   const file = fs.createReadStream(filename)
+
+    //   // Define the S3 upload parameters
+    //   const uploadParams = {
+    //     Bucket: bucket,
+    //     Key: fullFilename,
+    //     Body: file
+    //   }
+
+    //   // Upload the file to S3
+    //   const uploadFile = async () => {
+    //     await s3.upload(uploadParams, function (err, data) {
+    //       if (err) {
+    //         console.log('Error uploading file: ', err)
+    //       } else {
+    //         console.log('File successfully uploaded to S3: ', data.Location)
+    //       }
+    //     })
+
+    //     fsp.unlink(filename)
+    //       .then(() => {
+    //         console.log(filename, 'dihapus')
+    //       })
+    //       .catch((err) => {
+    //         console.error(err)
+    //       })
+    //   }
+    //   //uploadFile()
+
+    // })
   }
 
-  console.log(`stdout: ${stdout}`)
-  console.log(`stderr: ${stderr}`)
-
-  // Create a read stream for the file
-  const file = fs.createReadStream(filename)
-
-  // Define the S3 upload parameters
-  const params = {
-    Bucket: bucket,
-    Key: fullFilename,
-    Body: file
+  const deleteObject = async (anu) => {
+    console.log(anu)
   }
 
-  // Upload the file to S3
-  const upload = async () => {
-    await s3.upload(params, function (err, data) {
-      if (err) {
-        console.log('Error uploading file: ', err)
-      } else {
-        console.log('File successfully uploaded to S3: ', data.Location)
-      }
-    })
+  const anu = deleteObject('anu')
 
-    fsp.unlink(filename)
-      .then(() => {
-        console.log(filename, 'dihapus')
-      })
-      .catch((err) => {
-        console.error(err)
-      })
+    const listParam = {
+      Bucket: bucket,
+      Prefix: path
+    }
+
+  // const getListFiles = async () => {
+
+  //   let keys = null
+  //   const keyName = []
+  //      s3.listObjects(listParam, (err, data) => {
+  //       if (err) {
+  //         console.log(err)
+  //       } else {
+  //       // console.log(data.Contents);
+  //         keys = Object.keys(data.Contents)
+  //       }
+  //     })
+  //     console.log(keys)
+  //   const listFiles = async () => {
+  //     try {
+  //       const anu = await getListFiles()
+  //       console.log(anu)
+  //     } catch (error) {
+  //       console.error(error)
+  //     }
+  //   }
+  //   console.log(listFiles)
+  // }
+  // console.log(getListFiles)
+  
+  
+
+  
+
+  
+
+  const addObjectToArray = async () => {
+    await listFile()
+    console.log(files)
+    // for (let index = 0; index < keys.length; index++) {
+    //   const element = keys[index]
+    //   const value = data.Contents[element]
+    //   keyName.push(value.Key)
+    // }
+    // console.log('aaa', keyName)
+    // for (let index = 0; index < 2; index++) {
+    //   keyName.pop()
+    // }
   }
-  upload()
-})
-}
+  // const deleteFile = async () => {
+  //   const files = await listFile()
+  //   const filess = await addObjectToArray()
+  //   // await addObjectToArray()
+  //   console.log('bbb', files)
+  // }
+})()
